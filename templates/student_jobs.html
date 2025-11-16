@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Browse Jobs - NSUT Placement Portal{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Available Job Opportunities</h2>
+    
+    <!-- Search and Filters -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" action="{{ url_for('student_jobs') }}">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <input type="text" class="form-control" name="search" 
+                               placeholder="Search by company or job title" value="{{ search }}">
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <select class="form-select" name="branch">
+                            <option value="">All Branches</option>
+                            {% for branch in branches %}
+                                <option value="{{ branch }}" {% if branch_filter == branch %}selected{% endif %}>
+                                    {{ branch }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <select class="form-select" name="job_type">
+                            <option value="">All Types</option>
+                            {% for jtype in job_types %}
+                                <option value="{{ jtype }}" {% if job_type_filter == jtype %}selected{% endif %}>
+                                    {{ jtype }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <button type="submit" class="btn btn-primary w-100">Filter</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Job Listings -->
+    {% if jobs %}
+        <div class="row">
+            {% for job in jobs %}
+                <div class="col-md-12 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <h5>{{ job.title }}</h5>
+                                    <p class="mb-2 text-primary"><strong>{{ job.company_name }}</strong></p>
+                                    <p class="mb-2">{{ job.description[:200] }}...</p>
+                                    <div class="mb-2">
+                                        <span class="badge bg-info me-2">{{ job.job_type }}</span>
+                                        <span class="badge bg-secondary me-2">Min CGPA: {{ job.min_cgpa }}</span>
+                                        <span class="badge bg-success me-2">{{ job.num_openings }} openings</span>
+                                        <span class="badge bg-warning">Deadline: {{ job.deadline.strftime('%d %b %Y') }}</span>
+                                    </div>
+                                    <small class="text-muted">
+                                        Branches: {{ job.allowed_branches }} | Years: {{ job.allowed_years }}
+                                    </small>
+                                </div>
+                                <div class="col-md-3 text-end">
+                                    {% if job.already_applied > 0 %}
+                                        <button class="btn btn-secondary" disabled>Already Applied</button>
+                                    {% else %}
+                                        <form method="POST" action="{{ url_for('apply_job', job_id=job.id) }}">
+                                            <button type="submit" class="btn btn-primary">Apply Now</button>
+                                        </form>
+                                    {% endif %}
+                                    <p class="small text-muted mt-2">{{ job.total_applications }} applications</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            No jobs available matching your criteria. Try adjusting your filters.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

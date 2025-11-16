@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Import Students - Admin{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Bulk Import Students from CSV</h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <h6>CSV Format Instructions:</h6>
+                        <p class="mb-2">Your CSV file must have the following columns (in this exact order):</p>
+                        <code>roll_no,name,email,branch,year,cgpa,phone,skills</code>
+                        
+                        <p class="mt-3 mb-2"><strong>Example row:</strong></p>
+                        <code>2021CSE001,John Doe,john@nsut.ac.in,CSE,4,8.5,9876543210,Python Java Machine Learning</code>
+                        
+                        <p class="mt-3 mb-0"><strong>Note:</strong></p>
+                        <ul class="mb-0">
+                            <li>Passwords will be auto-generated and printed in console (email functionality not implemented in this version)</li>
+                            <li>Only years 3 and 4 are allowed</li>
+                            <li>Duplicate email/roll numbers will be skipped</li>
+                        </ul>
+                    </div>
+                    
+                    <form method="POST" action="{{ url_for('admin_import_students') }}" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="csv_file" class="form-label">Select CSV File</label>
+                            <input type="file" class="form-control" id="csv_file" name="csv_file" 
+                                   accept=".csv" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Import Students</button>
+                        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

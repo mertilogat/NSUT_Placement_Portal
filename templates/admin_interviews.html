@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Interviews - Admin{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Interview Scheduling</h2>
+    
+    <!-- Schedule New Interview -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Schedule New Interview</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('admin_interviews') }}" id="interviewForm">
+                <div class="mb-3">
+                    <label for="job_id" class="form-label">Select Job *</label>
+                    <select class="form-select" id="job_id" name="job_id" required onchange="loadShortlistedStudents()">
+                        <option value="">Choose a job</option>
+                        {% for job in jobs %}
+                            <option value="{{ job.id }}">{{ job.company_name }} - {{ job.title }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="interview_date" class="form-label">Interview Date *</label>
+                        <input type="date" class="form-control" id="interview_date" name="interview_date" required>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label for="interview_time" class="form-label">Interview Time *</label>
+                        <input type="time" class="form-control" id="interview_time" name="interview_time" required>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="location" class="form-label">Location (for on-campus interviews)</label>
+                    <input type="text" class="form-control" id="location" name="location" 
+                           placeholder="e.g., Conference Room A, NSUT">
+                </div>
+                
+                <div class="mb-3">
+                    <label for="meeting_link" class="form-label">Meeting Link (for online interviews)</label>
+                    <input type="url" class="form-control" id="meeting_link" name="meeting_link" 
+                           placeholder="e.g., https://meet.google.com/xyz">
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Select Students to Invite</label>
+                    <div id="studentsList" class="border rounded p-3" style="max-height: 300px; overflow-y: auto;">
+                        <p class="text-muted">Please select a job first</p>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Schedule Interview</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Upcoming Interviews -->
+    {% if interviews %}
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Upcoming Interviews</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Company</th>
+                                <th>Job Title</th>
+                                <th>Date & Time</th>
+                                <th>Location/Link</th>
+                                <th>Invited</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for interview in interviews %}
+                                <tr>
+                                    <td>{{ interview.company_name }}</td>
+                                    <td>{{ interview.title }}</td>
+                                    <td>{{ interview.interview_date.strftime('%d %b %Y') }} at 
+                                        {{ interview.interview_time.strftime('%I:%M %p') }}</td>
+                                    <td>
+                                        {% if interview.location %}{{ interview.location }}{% endif %}
+                                        {% if interview.meeting_link %}
+                                            <a href="{{ interview.meeting_link }}" target="_blank">Link</a>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ interview.invited_count }} students</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+function loadShortlistedStudents() {
+    const jobId = document.getElementById('job_id').value;
+    const studentsList = document.getElementById('studentsList');
+    
+    if (!jobId) {
+        studentsList.innerHTML = '<p class="text-muted">Please select a job first</p>';
+        return;
+    }
+    
+    studentsList.innerHTML = '<p class="text-muted">Loading...</p>';
+    
+    fetch(`/admin/interviews/${jobId}/shortlisted`)
+        .then(response => response.json())
+        .then(students => {
+            if (students.length === 0) {
+                studentsList.innerHTML = '<p class="text-muted">No shortlisted students for this job</p>';
+                return;
+            }
+            
+            let html = '';
+            students.forEach(student => {
+                html += `
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="students" 
+                               value="${student.id}" id="student_${student.id}">
+                        <label class="form-check-label" for="student_${student.id}">
+                            ${student.name} (${student.roll_no}) - ${student.branch} - CGPA: ${student.cgpa}
+                        </label>
+                    </div>
+                `;
+            });
+            
+            studentsList.innerHTML = html;
+        })
+        .catch(error => {
+            studentsList.innerHTML = '<p class="text-danger">Error loading students</p>';
+        });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Applications - {{ job.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">{{ job.title }} - Applications</h2>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <h6>Job Details</h6>
+            <p class="mb-1"><strong>Type:</strong> {{ job.job_type }}</p>
+            <p class="mb-1"><strong>Min CGPA:</strong> {{ job.min_cgpa }}</p>
+            <p class="mb-1"><strong>Deadline:</strong> {{ job.deadline.strftime('%d %b %Y') }}</p>
+            <p class="mb-0"><strong>Openings:</strong> {{ job.num_openings }}</p>
+        </div>
+    </div>
+    
+    {% if applications %}
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Roll No</th>
+                                <th>Branch</th>
+                                <th>Year</th>
+                                <th>CGPA</th>
+                                <th>Skills</th>
+                                <th>Resume</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for app in applications %}
+                                <tr>
+                                    <td>{{ app.name }}</td>
+                                    <td>{{ app.roll_no }}</td>
+                                    <td>{{ app.branch }}</td>
+                                    <td>{{ app.year }}</td>
+                                    <td>{{ app.cgpa }}</td>
+                                    <td>{{ app.skills_text[:50] }}...</td>
+                                    <td>
+                                        {% if app.resume_filename %}
+                                            <a href="{{ url_for('uploaded_file', filename=app.resume_filename) }}" 
+                                               target="_blank" class="btn btn-sm btn-outline-primary">View</a>
+                                        {% else %}
+                                            <span class="text-muted">N/A</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge 
+                                            {% if app.application_status == 'Selected' %}bg-success
+                                            {% elif app.application_status == 'Rejected' %}bg-danger
+                                            {% elif app.application_status == 'Interview' %}bg-warning
+                                            {% elif app.application_status == 'Shortlisted' %}bg-info
+                                            {% else %}bg-secondary{% endif %}">
+                                            {{ app.application_status }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <form method="POST" action="{{ url_for('update_application_status', app_id=app.id) }}" class="d-inline">
+                                            <select name="status" class="form-select form-select-sm" 
+                                                    onchange="this.form.submit()">
+                                                {% for status in statuses %}
+                                                    <option value="{{ status }}" 
+                                                            {% if app.application_status == status %}selected{% endif %}>
+                                                        {{ status }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            No applications received yet.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

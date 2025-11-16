@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Announcements - Admin{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Manage Announcements</h2>
+    
+    <!-- Post New Announcement -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Post New Announcement</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('admin_announcements') }}">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title *</label>
+                    <input type="text" class="form-control" id="title" name="title" required>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="content" class="form-label">Content *</label>
+                    <textarea class="form-control" id="content" name="content" rows="4" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Post Announcement</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Previous Announcements -->
+    {% if announcements %}
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">All Announcements</h5>
+            </div>
+            <div class="card-body">
+                {% for announcement in announcements %}
+                    <div class="border-bottom pb-3 mb-3">
+                        <h6>{{ announcement.title }}</h6>
+                        <p class="mb-1">{{ announcement.content }}</p>
+                        <small class="text-muted">
+                            Posted on {{ announcement.created_at.strftime('%d %b %Y, %I:%M %p') }}
+                        </small>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}Student Dashboard - NSUT Placement Portal{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <h2>Welcome, {{ student.name }}!</h2>
+            <p class="text-muted">Roll No: {{ student.roll_no }} | Branch: {{ student.branch }} | CGPA: {{ student.cgpa }}</p>
+        </div>
+    </div>
+    
+    <!-- Quick Stats -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="text-primary">{{ applications|length }}</h3>
+                    <p class="mb-0">Applications</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="text-success">{{ interviews|length }}</h3>
+                    <p class="mb-0">Interviews</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="text-warning">
+                        {{ applications|selectattr('application_status', 'equalto', 'Shortlisted')|list|length }}
+                    </h3>
+                    <p class="mb-0">Shortlisted</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="text-info">
+                        {{ applications|selectattr('application_status', 'equalto', 'Selected')|list|length }}
+                    </h3>
+                    <p class="mb-0">Selected</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- My Applications -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">My Applications</h5>
+                    <a href="{{ url_for('student_jobs') }}" class="btn btn-sm btn-primary">Browse Jobs</a>
+                </div>
+                <div class="card-body">
+                    {% if applications %}
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Company</th>
+                                        <th>Position</th>
+                                        <th>Type</th>
+                                        <th>Applied On</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for app in applications %}
+                                        <tr>
+                                            <td>{{ app.company_name }}</td>
+                                            <td>{{ app.title }}</td>
+                                            <td><span class="badge bg-info">{{ app.job_type }}</span></td>
+                                            <td>{{ app.applied_at.strftime('%d %b %Y') }}</td>
+                                            <td>
+                                                {% if app.application_status == 'Selected' %}
+                                                    <span class="badge bg-success">{{ app.application_status }}</span>
+                                                {% elif app.application_status == 'Rejected' %}
+                                                    <span class="badge bg-danger">{{ app.application_status }}</span>
+                                                {% elif app.application_status == 'Interview' %}
+                                                    <span class="badge bg-warning">{{ app.application_status }}</span>
+                                                {% elif app.application_status == 'Shortlisted' %}
+                                                    <span class="badge bg-info">{{ app.application_status }}</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">{{ app.application_status }}</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted text-center">No applications yet. <a href="{{ url_for('student_jobs') }}">Browse jobs</a> to get started!</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Interview Schedule -->
+    {% if interviews %}
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Interview Schedule</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Position</th>
+                                    <th>Date & Time</th>
+                                    <th>Location/Link</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for interview in interviews %}
+                                    <tr>
+                                        <td>{{ interview.company_name }}</td>
+                                        <td>{{ interview.title }}</td>
+                                        <td>{{ interview.interview_date.strftime('%d %b %Y') }} at {{ interview.interview_time.strftime('%I:%M %p') }}</td>
+                                        <td>
+                                            {% if interview.location %}
+                                                {{ interview.location }}
+                                            {% endif %}
+                                            {% if interview.meeting_link %}
+                                                <a href="{{ interview.meeting_link }}" target="_blank">Join Meeting</a>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if interview.status == 'Accepted' %}
+                                                <span class="badge bg-success">Accepted</span>
+                                            {% elif interview.status == 'Declined' %}
+                                                <span class="badge bg-danger">Declined</span>
+                                            {% else %}
+                                                <span class="badge bg-warning">Pending</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if interview.status == 'Pending' %}
+                                                <a href="{{ url_for('respond_interview', invitation_id=interview.id, action='accept') }}" 
+                                                   class="btn btn-sm btn-success">Accept</a>
+                                                <a href="{{ url_for('respond_interview', invitation_id=interview.id, action='decline') }}" 
+                                                   class="btn btn-sm btn-danger">Decline</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Announcements -->
+    {% if announcements %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Recent Announcements</h5>
+                </div>
+                <div class="card-body">
+                    {% for announcement in announcements %}
+                        <div class="border-bottom pb-3 mb-3">
+                            <h6>{{ announcement.title }}</h6>
+                            <p class="mb-1">{{ announcement.content }}</p>
+                            <small class="text-muted">{{ announcement.created_at.strftime('%d %b %Y, %I:%M %p') }}</small>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

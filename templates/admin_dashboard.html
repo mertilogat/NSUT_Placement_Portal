@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - NSUT Placement Portal{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Placement Cell Admin Dashboard</h2>
+    
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-center bg-primary text-white">
+                <div class="card-body">
+                    <h3>{{ stats.total_students }}</h3>
+                    <p class="mb-0">Total Students</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center bg-success text-white">
+                <div class="card-body">
+                    <h3>{{ stats.total_companies }}</h3>
+                    <p class="mb-0">Active Companies</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center bg-info text-white">
+                <div class="card-body">
+                    <h3>{{ stats.total_jobs }}</h3>
+                    <p class="mb-0">Approved Jobs</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center bg-warning text-dark">
+                <div class="card-body">
+                    <h3>{{ stats.total_placements }}</h3>
+                    <p class="mb-0">Placements</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Pending Items -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4 class="text-danger">{{ stats.pending_jobs }}</h4>
+                    <p class="mb-0">Pending Job Approvals</p>
+                    <a href="{{ url_for('admin_jobs') }}" class="btn btn-sm btn-primary mt-2">Review Jobs</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4 class="text-danger">{{ stats.pending_companies }}</h4>
+                    <p class="mb-0">Pending Company Activations</p>
+                    <a href="{{ url_for('admin_companies') }}" class="btn btn-sm btn-primary mt-2">Review Companies</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <a href="{{ url_for('admin_new_company') }}" class="btn btn-primary me-2">
+                        <i class="bi bi-plus-circle"></i> Add Company
+                    </a>
+                    <a href="{{ url_for('admin_import_students') }}" class="btn btn-success me-2">
+                        <i class="bi bi-upload"></i> Import Students (CSV)
+                    </a>
+                    <a href="{{ url_for('admin_announcements') }}" class="btn btn-info me-2">
+                        <i class="bi bi-megaphone"></i> Post Announcement
+                    </a>
+                    <a href="{{ url_for('admin_interviews') }}" class="btn btn-warning">
+                        <i class="bi bi-calendar"></i> Schedule Interview
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Applications -->
+    {% if recent_applications %}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Recent Applications</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Company</th>
+                                    <th>Job Title</th>
+                                    <th>Applied On</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for app in recent_applications %}
+                                    <tr>
+                                        <td>{{ app.student_name }}</td>
+                                        <td>{{ app.company_name }}</td>
+                                        <td>{{ app.title }}</td>
+                                        <td>{{ app.applied_at.strftime('%d %b %Y') }}</td>
+                                        <td>
+                                            <span class="badge 
+                                                {% if app.application_status == 'Selected' %}bg-success
+                                                {% elif app.application_status == 'Rejected' %}bg-danger
+                                                {% elif app.application_status == 'Interview' %}bg-warning
+                                                {% elif app.application_status == 'Shortlisted' %}bg-info
+                                                {% else %}bg-secondary{% endif %}">
+                                                {{ app.application_status }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

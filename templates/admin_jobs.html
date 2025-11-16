@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Jobs - Admin{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Manage Job Postings</h2>
+    
+    {% if jobs %}
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Company</th>
+                                <th>Job Title</th>
+                                <th>Type</th>
+                                <th>Min CGPA</th>
+                                <th>Deadline</th>
+                                <th>Openings</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for job in jobs %}
+                                <tr>
+                                    <td>{{ job.company_name }}</td>
+                                    <td>{{ job.title }}</td>
+                                    <td><span class="badge bg-info">{{ job.job_type }}</span></td>
+                                    <td>{{ job.min_cgpa }}</td>
+                                    <td>{{ job.deadline.strftime('%d %b %Y') }}</td>
+                                    <td>{{ job.num_openings }}</td>
+                                    <td>
+                                        {% if job.status == 'Approved' %}
+                                            <span class="badge bg-success">Approved</span>
+                                        {% elif job.status == 'Rejected' %}
+                                            <span class="badge bg-danger">Rejected</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">Pending</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if job.status == 'Pending' %}
+                                            <a href="{{ url_for('admin_job_status', job_id=job.id, status='Approved') }}" 
+                                               class="btn btn-sm btn-success">Approve</a>
+                                            <a href="{{ url_for('admin_job_status', job_id=job.id, status='Rejected') }}" 
+                                               class="btn btn-sm btn-danger">Reject</a>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info">No job postings yet.</div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Login - NSUT Placement Portal{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <img src="{{ url_for('static', filename='images/nsut_logo.png') }}" alt="NSUT Logo" style="height: 80px;">
+                        <h3 class="mt-3">Login to Portal</h3>
+                        <p class="text-muted">Enter your credentials to continue</p>
+                    </div>
+                    
+                    <form method="POST" action="{{ url_for('login') }}">
+                        <div class="mb-3">
+                            <label for="user_type" class="form-label">I am a</label>
+                            <select class="form-select" id="user_type" name="user_type" required>
+                                <option value="">Select user type</option>
+                                <option value="student">Student</option>
+                                <option value="company">Company Recruiter</option>
+                                <option value="admin">Placement Cell Admin</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+                    
+                    <div class="text-center mt-3">
+                        <p class="mb-0 text-muted">New student? 
+                            <a href="{{ url_for('student_signup') }}">Create an account</a>
+                        </p>
+                    </div>
+                    
+                    <div class="alert alert-info mt-4 small">
+                        <strong>Default Admin Credentials:</strong><br>
+                        Email: admin@nsut.ac.in<br>
+                        Password: admin123
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

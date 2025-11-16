@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Post New Job - NSUT Placement Portal{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Post New Job Opening</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('company_new_job') }}">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Job Title *</label>
+                            <input type="text" class="form-control" id="title" name="title" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Job Description *</label>
+                            <textarea class="form-control" id="description" name="description" 
+                                      rows="5" required></textarea>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="job_type" class="form-label">Job Type *</label>
+                                <select class="form-select" id="job_type" name="job_type" required>
+                                    {% for jtype in job_types %}
+                                        <option value="{{ jtype }}">{{ jtype }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="min_cgpa" class="form-label">Minimum CGPA *</label>
+                                <input type="number" step="0.01" min="0" max="10" class="form-control" 
+                                       id="min_cgpa" name="min_cgpa" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Allowed Branches *</label>
+                            <div class="row">
+                                {% for branch in branches %}
+                                    <div class="col-md-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" 
+                                                   name="branches" value="{{ branch }}" id="branch_{{ branch }}">
+                                            <label class="form-check-label" for="branch_{{ branch }}">
+                                                {{ branch }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Allowed Years *</label>
+                            <div class="row">
+                                {% for year in years %}
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" 
+                                                   name="years" value="{{ year }}" id="year_{{ year }}">
+                                            <label class="form-check-label" for="year_{{ year }}">
+                                                Year {{ year }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="deadline" class="form-label">Application Deadline *</label>
+                                <input type="date" class="form-control" id="deadline" name="deadline" required>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="num_openings" class="form-label">Number of Openings *</label>
+                                <input type="number" min="1" class="form-control" 
+                                       id="num_openings" name="num_openings" required>
+                            </div>
+                        </div>
+                        
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i> Your job posting will be reviewed by the placement cell admin before going live.
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Submit Job Posting</button>
+                        <a href="{{ url_for('company_dashboard') }}" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Home - NSUT Placement Portal{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-10">
+            <!-- Hero Section -->
+            <div class="text-center mb-5">
+                <img src="{{ url_for('static', filename='images/nsut_logo.png') }}" alt="NSUT Logo" style="height: 150px; margin-bottom: 30px;">
+                <h1 class="display-4 fw-bold">Welcome to NSUT Placement Portal</h1>
+                <p class="lead text-muted">
+                    Connecting talented students with top companies for internships and placements
+                </p>
+            </div>
+            
+            <!-- Login Options -->
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="card h-100 text-center p-4 hover-shadow">
+                        <div class="card-body">
+                            <i class="bi bi-person-badge fs-1 text-primary mb-3"></i>
+                            <h5 class="card-title">Students</h5>
+                            <p class="card-text text-muted">
+                                Browse job opportunities, apply to positions, and track your applications
+                            </p>
+                            <a href="{{ url_for('student_signup') }}" class="btn btn-outline-primary">Sign Up</a>
+                            <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 text-center p-4 hover-shadow">
+                        <div class="card-body">
+                            <i class="bi bi-building fs-1 text-success mb-3"></i>
+                            <h5 class="card-title">Companies</h5>
+                            <p class="card-text text-muted">
+                                Post job openings, review applications, and hire talented students
+                            </p>
+                            <a href="{{ url_for('login') }}" class="btn btn-success">Login</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="card h-100 text-center p-4 hover-shadow">
+                        <div class="card-body">
+                            <i class="bi bi-shield-check fs-1 text-danger mb-3"></i>
+                            <h5 class="card-title">Placement Cell</h5>
+                            <p class="card-text text-muted">
+                                Manage companies, approve jobs, and oversee the placement process
+                            </p>
+                            <a href="{{ url_for('login') }}" class="btn btn-danger">Admin Login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Features Section -->
+            <div class="row text-center mb-5">
+                <div class="col-md-12">
+                    <h3 class="mb-4">Platform Features</h3>
+                </div>
+                <div class="col-md-3">
+                    <i class="bi bi-search fs-2 text-primary"></i>
+                    <h6 class="mt-2">Job Search & Filters</h6>
+                    <p class="small text-muted">Find opportunities by branch, CGPA, and job type</p>
+                </div>
+                <div class="col-md-3">
+                    <i class="bi bi-file-earmark-pdf fs-2 text-primary"></i>
+                    <h6 class="mt-2">Resume Upload</h6>
+                    <p class="small text-muted">Upload and manage your resume securely</p>
+                </div>
+                <div class="col-md-3">
+                    <i class="bi bi-calendar-check fs-2 text-primary"></i>
+                    <h6 class="mt-2">Interview Scheduling</h6>
+                    <p class="small text-muted">Track interviews with calendar integration</p>
+                </div>
+                <div class="col-md-3">
+                    <i class="bi bi-graph-up fs-2 text-primary"></i>
+                    <h6 class="mt-2">Application Tracking</h6>
+                    <p class="small text-muted">Monitor your application status in real-time</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .hover-shadow {
+        transition: all 0.3s ease;
+    }
+    .hover-shadow:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15) !important;
+    }
+</style>
+{% endblock %}
