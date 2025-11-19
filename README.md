@@ -413,10 +413,8 @@ Follow the checklist in `MANUAL_TEST_CHECKLIST.md` to test all features.
 ## Support
 
 For issues or questions:
-1. Check `MANUAL_TEST_CHECKLIST.md`
-2. Review `viva_notes.md`
-3. Check database logs in XAMPP
-4. Review Flask console output for errors
+1. Check database logs in XAMPP
+2. Review Flask console output for errors
 
 ---
 
