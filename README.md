@@ -18,8 +18,7 @@ A simple, teacher-friendly Flask-based placement management system using MySQL f
 8. [Project Structure](#project-structure)
 9. [Database Schema](#database-schema)
 10. [Testing](#testing)
-11. [Exporting from Replit](#exporting-from-replit)
-12. [Troubleshooting](#troubleshooting)
+11. [Troubleshooting](#troubleshooting)
 
 ---
 
