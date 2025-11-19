@@ -270,7 +270,6 @@ nsut-placement-portal/
 │
 ├── db/
 │   ├── nsut_placement.sql     # Complete database schema + seed data
-│   └── ER_DIAGRAM_EXPLANATION.md  # ER diagram documentation
 │
 ├── templates/                 # HTML templates (Jinja2)
 │   ├── base.html
@@ -288,8 +287,6 @@ nsut-placement-portal/
 │
 ├── uploads/                   # Resume storage (created automatically)
 │
-├── viva_notes.md             # Viva preparation guide
-├── MANUAL_TEST_CHECKLIST.md  # Testing guide
 ├── run_local.bat             # Windows run script
 └── run_local.sh              # Linux/Mac run script
 ```
@@ -353,36 +350,6 @@ Follow the checklist in `MANUAL_TEST_CHECKLIST.md` to test all features.
 
 ---
 
-## Exporting from Replit
-
-### Method 1: Download as ZIP
-
-1. In Replit, click the three dots (⋮) menu
-2. Select "Download as ZIP"
-3. Extract on your local machine
-4. Follow the installation steps above
-
-### Method 2: Push to GitHub
-
-1. In Replit Shell:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git remote add origin <your-github-repo-url>
-   git push -u origin main
-   ```
-
-2. Clone on your local machine:
-   ```bash
-   git clone <your-github-repo-url>
-   cd nsut-placement-portal
-   ```
-
-3. Follow the installation steps above
-
----
-
 ## Troubleshooting
 
 ### Database Connection Error
@@ -441,16 +408,6 @@ Follow the checklist in `MANUAL_TEST_CHECKLIST.md` to test all features.
 1. Ensure `uploads/` directory exists
 2. Check file is PDF and under 2MB
 3. Verify file permissions on `uploads/` folder
-
----
-
-## For Viva Preparation
-
-See `viva_notes.md` for:
-- Database design explanation
-- 5 sample SQL queries with explanations
-- Project architecture overview
-- Key design decisions
 
 ---
 
