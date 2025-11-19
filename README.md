@@ -307,7 +307,6 @@ The database consists of 8 main tables:
 
 For detailed schema and relationships, see:
 - `db/nsut_placement.sql` - Full SQL schema
-- `db/ER_DIAGRAM_EXPLANATION.md` - ER diagram and relationships
 
 ---
 
