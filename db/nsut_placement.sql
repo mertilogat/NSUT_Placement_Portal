@@ -164,7 +164,7 @@ CREATE TABLE announcements (
 -- Password: admin123
 -- ============================================
 INSERT INTO pc_admins (name, email, password_hash) VALUES
-('Placement Cell Admin', 'admin@nsut.ac.in', 'scrypt:32768:8:1$YkF8hs0t9VxEbLWc$f8e8b8d8a8c8b8e8f8e8b8d8a8c8b8e8f8e8b8d8a8c8b8e8f8e8b8d8a8c8b8e8f8e8b8d8a8c8b8e8f8e8b8d8a8c8b8e8');
+('Placement Cell Admin', 'admin@nsut.ac.in', 'scrypt:32768:8:1$1WYJ6IvvzMi78YWf$6e7df3da5349f45335cd02f7af7d5c6409e41822f4a089968bdaa5bf912e4c7dd410b3af4a53eadd6ae4678674183bfe011947068a4294ad8e2848ffc58e9514');
 
 -- Note: The password_hash above is a placeholder. In the actual Flask app, 
 -- we will use werkzeug.security.generate_password_hash('admin123') 
